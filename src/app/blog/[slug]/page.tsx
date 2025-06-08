@@ -20,7 +20,6 @@ export async function generateStaticParams() {
 // This function generates metadata for the page (title, description for SEO)
 // The `params` object is directly available, not a Promise.
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  // No need for await Promise.resolve() here, as params is directly available
   try {
     const post = await getPostData(params.slug);
     return {
@@ -32,7 +31,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       //   images: post.coverImage ? [{ url: post.coverImage }] : [],
       // },
     };
-  } catch (_error) {
+  } catch { // Removed '_error' from here
     // Post not found, metadata can reflect that or be generic
     return {
       title: 'Post Not Found',
@@ -42,11 +41,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function PostPage({ params }: Props) {
-  // No need for await Promise.resolve() here either, params is directly available
   let post: PostData;
   try {
     post = await getPostData(params.slug);
-  } catch (_error) {
+  } catch { // Removed '_error' from here
     // If getPostData throws (e.g., file not found), trigger a 404 page.
     notFound();
   }
