@@ -4,11 +4,18 @@ import { getAllPostSlugs, getPostData, PostData } from '@/lib/posts'; // Adjust 
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 
-// Define the Props interface for the page component and generateMetadata
+// Define the Props interface for the main page component
 interface Props {
   params: { slug: string };
   // searchParams?: { [key: string]: string | string[] | undefined }; // Include if searchParams are ever used
 }
+
+// Define a separate type for generateMetadata's parameters
+type GenerateMetadataProps = {
+  params: { slug: string };
+  // searchParams?: { [key: string]: string | string[] | undefined }; // Add if searchParams are used in metadata generation
+};
+
 
 // This function is needed for Next.js to know which slugs to pre-render at build time.
 // In App Router, this is how you generate static paths.
@@ -18,8 +25,8 @@ export async function generateStaticParams() {
 }
 
 // This function generates metadata for the page (title, description for SEO)
-// The `params` object is directly available, not a Promise.
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+// Using the new GenerateMetadataProps type
+export async function generateMetadata({ params }: GenerateMetadataProps): Promise<Metadata> {
   try {
     const post = await getPostData(params.slug);
     return {
@@ -31,7 +38,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       //   images: post.coverImage ? [{ url: post.coverImage }] : [],
       // },
     };
-  } catch { // Removed '_error' from here
+  } catch {
     // Post not found, metadata can reflect that or be generic
     return {
       title: 'Post Not Found',
@@ -44,7 +51,7 @@ export default async function PostPage({ params }: Props) {
   let post: PostData;
   try {
     post = await getPostData(params.slug);
-  } catch { // Removed '_error' from here
+  } catch {
     // If getPostData throws (e.g., file not found), trigger a 404 page.
     notFound();
   }
