@@ -4,6 +4,7 @@ import { getAllPostSlugs, getPostData, PostData } from '@/lib/posts'; // Adjust 
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 
+// Define the Props interface for the page component and generateMetadata
 interface Props {
   params: { slug: string };
   // searchParams?: { [key: string]: string | string[] | undefined }; // Include if searchParams are ever used
@@ -17,8 +18,9 @@ export async function generateStaticParams() {
 }
 
 // This function generates metadata for the page (title, description for SEO)
+// The `params` object is directly available, not a Promise.
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  await Promise.resolve(); // New line
+  // No need for await Promise.resolve() here, as params is directly available
   try {
     const post = await getPostData(params.slug);
     return {
@@ -30,7 +32,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       //   images: post.coverImage ? [{ url: post.coverImage }] : [],
       // },
     };
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (_error) {
     // Post not found, metadata can reflect that or be generic
     return {
@@ -41,11 +42,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function PostPage({ params }: Props) {
-  await Promise.resolve(); // New line
+  // No need for await Promise.resolve() here either, params is directly available
   let post: PostData;
   try {
     post = await getPostData(params.slug);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (_error) {
     // If getPostData throws (e.g., file not found), trigger a 404 page.
     notFound();
@@ -73,10 +73,6 @@ export default async function PostPage({ params }: Props) {
                 className="object-cover w-full h-full" // Make image fill the container while maintaining aspect ratio
               />
             </div>
-            // {/* TODO: Review actual image dimensions and optimize Image component props (layout, sizes).
-            //     The current setup uses fixed dimensions for the Image component but allows the container to influence its display.
-            //     For truly responsive behavior with varying image aspect ratios, more advanced next/image techniques might be needed.
-            // */}
           )}
         </header>
 
