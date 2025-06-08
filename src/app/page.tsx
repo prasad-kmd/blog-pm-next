@@ -4,7 +4,7 @@ export default function HomePage() {
   return (
     <Layout>
       <section className="text-center py-12">
-        <h1 className="text-4xl font-bold mb-4">Welcome to PrasadM's Blog!</h1>
+        <h1 className="text-4xl font-bold mb-4">Welcome to PrasadM&apos;s Blog!</h1>
         <p className="text-lg text-gray-700 mb-8">
           Sharing educational and inspiring content for mechanical and mechatronics engineers.
         </p>

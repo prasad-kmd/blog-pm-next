@@ -14,7 +14,7 @@ export interface PostData {
   author?: string;
   coverImage?: string;
   contentHtml: string;
-  [key: string]: any; // Allow other frontmatter fields
+  [key: string]: unknown; // Allow other frontmatter fields, safer than any
 }
 
 export function getSortedPostsData(): PostData[] {
@@ -68,12 +68,14 @@ export async function getPostData(slug: string): Promise<PostData> {
   let fileContents;
   try {
     fileContents = fs.readFileSync(fullPath, 'utf8');
-  } catch (err) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  } catch (_err) {
     // If .mdx not found, try .md
     const mdFullPath = path.join(postsDirectory, `${slug}.md`);
     try {
       fileContents = fs.readFileSync(mdFullPath, 'utf8');
-    } catch (mdErr) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (_mdErr) {
       // If neither found, rethrow or handle as 404
       throw new Error(`Post with slug "${slug}" not found.`);
     }

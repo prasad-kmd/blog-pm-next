@@ -4,17 +4,17 @@ export default function AboutPage() {
   return (
     <Layout>
       <div className="py-8 px-4 md:px-0">
-        <h1 className="text-3xl font-bold mb-6 text-center">About PrasadM's Blog</h1>
+        <h1 className="text-3xl font-bold mb-6 text-center">About PrasadM&apos;s Blog</h1>
         <div className="max-w-2xl mx-auto text-gray-700 space-y-4">
           <p>
-            Welcome to PrasadM's Blog, a dedicated space for individuals passionate about engineering,
+            Welcome to PrasadM&apos;s Blog, a dedicated space for individuals passionate about engineering,
             with a special focus on Mechanical and Mechatronics Engineering.
           </p>
           <p>
             Our mission is to share educational and inspiring content that not only enlightens
-            but also empowers engineers at all stages of their careers. Whether you're a student
+            but also empowers engineers at all stages of their careers. Whether you&apos;re a student
             just starting, a professional looking to deepen your knowledge, or an enthusiast
-            curious about the latest advancements, you'll find valuable insights here.
+            curious about the latest advancements, you&apos;ll find valuable insights here.
           </p>
           <h2 className="text-2xl font-semibold mt-6 mb-3">What We Cover</h2>
           <ul className="list-disc list-inside space-y-1">

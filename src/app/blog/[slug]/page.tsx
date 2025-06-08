@@ -1,7 +1,13 @@
 import Layout from '@/components/Layout';
+import Image from 'next/image';
 import { getAllPostSlugs, getPostData, PostData } from '@/lib/posts'; // Adjust path if necessary
 import { notFound } from 'next/navigation';
-import Head from 'next/head'; // Though for App Router, metadata API is preferred
+import type { Metadata } from 'next';
+
+interface Props {
+  params: { slug: string };
+  // searchParams?: { [key: string]: string | string[] | undefined }; // Include if searchParams are ever used
+}
 
 // This function is needed for Next.js to know which slugs to pre-render at build time.
 // In App Router, this is how you generate static paths.
@@ -11,7 +17,8 @@ export async function generateStaticParams() {
 }
 
 // This function generates metadata for the page (title, description for SEO)
-export async function generateMetadata({ params }: { params: { slug: string } }) {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  await Promise.resolve(); // New line
   try {
     const post = await getPostData(params.slug);
     return {
@@ -23,7 +30,8 @@ export async function generateMetadata({ params }: { params: { slug: string } })
       //   images: post.coverImage ? [{ url: post.coverImage }] : [],
       // },
     };
-  } catch (error) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  } catch (_error) {
     // Post not found, metadata can reflect that or be generic
     return {
       title: 'Post Not Found',
@@ -32,11 +40,13 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   }
 }
 
-export default async function PostPage({ params }: { params: { slug: string } }) {
+export default async function PostPage({ params }: Props) {
+  await Promise.resolve(); // New line
   let post: PostData;
   try {
     post = await getPostData(params.slug);
-  } catch (error) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  } catch (_error) {
     // If getPostData throws (e.g., file not found), trigger a 404 page.
     notFound();
   }
@@ -54,12 +64,19 @@ export default async function PostPage({ params }: { params: { slug: string } })
             {post.author && <span>By {post.author}</span>}
           </div>
           {post.coverImage && (
-            <img
-              src={post.coverImage}
-              alt={`${post.title} cover image`}
-              className="mt-6 w-full h-auto rounded-lg shadow-md object-cover"
-              style={{ maxHeight: '400px' }} // Optional: constrain image height
-            />
+            <div className="mt-6 w-full rounded-lg shadow-md overflow-hidden" style={{ maxHeight: '400px' }}> {/* Container for aspect ratio and max height */}
+              <Image
+                src={post.coverImage}
+                alt={`${post.title} cover image`}
+                width={700}  // Intrinsic width of the image file (or desired render width)
+                height={350} // Intrinsic height of the image file (or desired render height)
+                className="object-cover w-full h-full" // Make image fill the container while maintaining aspect ratio
+              />
+            </div>
+            // {/* TODO: Review actual image dimensions and optimize Image component props (layout, sizes).
+            //     The current setup uses fixed dimensions for the Image component but allows the container to influence its display.
+            //     For truly responsive behavior with varying image aspect ratios, more advanced next/image techniques might be needed.
+            // */}
           )}
         </header>
 
